@@ -6,7 +6,7 @@ import { useRoutes, BrowserRouter } from "react-router-dom";
 
 
 const Login = React.lazy(() => import("./Login"));
-const SignUp = React.lazy(() => import("./Signup"));
+
 const Logout = React.lazy(() => import("./Logout"));
 const Dashboard = React.lazy(() => import("./Dashboard"));
 const CreateRound = React.lazy(() => import("./CreateRound"));
@@ -22,14 +22,7 @@ const publicRoutes = [
       </Suspense>
     ),
   },
-  {
-    path: "/signup",
-    element: (
-      <Suspense fallback={<div>Loading</div>}>
-        <SignUp />
-      </Suspense>
-    ),
-  },
+  
   {
     path: "*",
     element: (

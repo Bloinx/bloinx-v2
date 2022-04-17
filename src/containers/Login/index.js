@@ -1,41 +1,41 @@
 import React from "react";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-
-import Form from "./Form";
 import styles from "./index.module.scss";
 import logo from "../../assets/bloinxLogo.png";
+import { Auth, Typography, Button } from '@supabase/ui'
+import supabase from '../../supabase';
+
+const Container = (props) => {
+  const { user } = Auth.useUser()
+  if (user)
+    return (
+      <>
+        <Typography.Text>Signed in: {user.email}</Typography.Text>
+        <Button block onClick={() => props.supabaseClient.auth.signOut()}>
+          Sign out
+        </Button>
+      </>
+    )
+  return props.children
+}
+
+const AuthBasic = () => {
+  return (                                                    
+    <Auth.UserContextProvider supabaseClient={supabase}>
+      <Container supabaseClient={supabase}>
+        <Auth supabaseClient={supabase}  />
+      </Container>
+    </Auth.UserContextProvider>
+  )
+}
 
 function Login() {
   return (
     <div className={styles.Login}>
-      <div className={styles.LoginTitle}>
+    <div className={styles.LoginTitle}>
         <img src={logo} alt="Logo de bloinx" />
       </div>
       <div className={styles.LoginCard}>
-        <Typography
-          variant="h6"
-          component="div"
-          gutterBottom
-          className={styles.LoginText}
-        >
-          Iniciar sesión
-        </Typography>
-        <div className={styles.LoginContent}>
-          <Form />
-          <div className={styles.LoginOptions}>
-            <Typography
-              variant="caption"
-              component="p"
-              className={styles.LoginText}
-            >
-              También puedes
-            </Typography>
-            <Button variant="outlined" href="/signup">
-              Registrarme
-            </Button>
-          </div>
-        </div>
+      <AuthBasic/>
       </div>
     </div>
   );
