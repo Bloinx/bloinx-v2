@@ -6,15 +6,16 @@ import getAddressOrderList from "../../utils/getAddressOrderList";
 
 export const getRoundsList = async () => {
   const user = supabase.auth.user();
-
+  //user.id
   const { data, error } = await supabase
-    .from("rounds")
-    .select("*, positions(name, registrationDate)")
-    .eq("createByUser", user.id)
-    .order("createTime", { ascending: true });
+    .from("Rounds")
+    // .select("*, positions(name, registrationDate)")
+    .select()
+    .eq("create_by_user", 'FIaC1UftjpRNZsGoNj3qcEEscSx2')
+   // .order("created_at", { ascending: true });
 
   console.log({ data, error });
-
+//contrato con ronda: 0x92f7AC475276Cc12546F54Cb9687B9714ca32e2d
   return new Promise((resolve, reject) => {
     let dataProcessed = [];
     let count = data.length - 1;
@@ -33,7 +34,8 @@ export const getRoundsList = async () => {
       const isRegistered = !!orderList.find(
         ({ address }) =>
           address.toLowerCase() ===
-          localStorage.getItem("currentWallet").toLowerCase()
+          localStorage.getItem("currentWallet")
+          // localStorage.getItem("currentWallet").toLowerCase()
       );
 
       dataProcessed = [...dataProcessed, { ...round, isRegistered, isAdmin }];

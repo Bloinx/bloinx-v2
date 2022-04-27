@@ -25,7 +25,8 @@ function RoundsList() {
 
   useEffect(() => {
     getRounds();
-  }, []);
+  }, [
+  ]);
 
   return (
     <Card variant="outlined" className={styles.DataBorder}>
@@ -34,8 +35,8 @@ function RoundsList() {
           <div className={styles.DataListHeader}>Nombre de Ronda</div>
           <div className={styles.DataListHeader}>Próximo Pago</div>
         </div>
-        {roundsList.map((round) => (
-          <div key={round.contract} className={styles.DataListRow}>
+        {roundsList.map((round, index) => (
+          <div key={index} className={styles.DataListRow}>
             <div className={styles.DataListItem}>
               {round.isAdmin && !round.isRegistered && "Nueva ronda vacia"}
               {round.isAdmin && round.isRegistered && round.positions[0]?.name}

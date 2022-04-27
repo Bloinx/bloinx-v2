@@ -38,9 +38,6 @@ const publicRoutes = [
       </Suspense>
     ),
   },
-];
-
-const privateRoutes = [
   {
     path: "/dashboard",
     element: (
@@ -48,7 +45,11 @@ const privateRoutes = [
         <Dashboard />
       </Suspense>
     ),
-  },
+  }
+];
+
+const privateRoutes = [
+
   {
     path: "/create-round/*",
     element: (
