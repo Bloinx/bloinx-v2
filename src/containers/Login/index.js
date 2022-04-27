@@ -4,8 +4,8 @@ import logo from "../../assets/bloinxLogo.png";
 import { Auth, Typography, Button } from '@supabase/ui'
 import supabase from '../../supabase';
 
-const Container = (props) => {
-  const { user } = Auth.useUser()
+function Container(props) {
+  const { user } = Auth.useUser();
   if (user)
     return (
       <>
@@ -14,8 +14,8 @@ const Container = (props) => {
           Sign out
         </Button>
       </>
-    )
-  return props.children
+    );
+  return props.children;
 }
 
 const AuthBasic = () => {
