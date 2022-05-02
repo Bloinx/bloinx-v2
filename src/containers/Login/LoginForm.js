@@ -14,8 +14,40 @@ export default function LoginForms(props) {
     const { switchToSignup } = useContext(AuthContext);
     const { switchToForgotPassword } = useContext(AuthContext);
     const [loading, setLoading] = useState(false); 
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
+    const handleLogin = async (e) => {
+        setLoading(true);
+        setError(false);
+        setErrorMessage("");
+        const { data, error } = await supabase.api.login(email, password);  
+        if (error) {
+            setError(true);
+            setErrorMessage(error.message);
+            setLoading(false);
+        } else {
+            setLoading(false);
+            props.history.push("/");
+        }
+    };
+    const onChange = (e) => {
+        switch (e.target.name) {    
+            case "email":
+                setEmail(e.target.value);
+                break;
+            case "password":
+                setPassword(e.target.value);
+                break;
+            default:
+                break;
+        }   
 
+    };
+    
+    
 
 
 
@@ -33,6 +65,8 @@ export default function LoginForms(props) {
                         icon={<IconMail size={21} stroke={'#666666'} />}
                         size="tiny"
                         name="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value}
                     />
                     <Input
                         label="Contraseña"
@@ -51,6 +85,7 @@ export default function LoginForms(props) {
                         style={{ "backgroundColor": "#f58f98", "width": "100%" }}
                         icon={<IconLock size={21} />}
                         loading={loading}
+                        onClick={handleLogin}
                         block
                     >
                         Entrar
