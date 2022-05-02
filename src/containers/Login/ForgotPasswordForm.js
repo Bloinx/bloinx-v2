@@ -1,32 +1,24 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import {
     Input,
     Button,
     Space,
     IconMail,
 } from '@supabase/ui';
-import { AccountContext } from "./accountContext";
+import { AuthContext } from "./authContext";
 import supabase from "../../supabase";
 
-export function ForgotPasswordForm(props) {
-    const { switchToSignin } = useContext(AccountContext);
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState('')
-    const [email, setEmail] = useState('')
+export default function  ForgotPasswordForm(props) {    
+    const { switchToSignin } = useContext(AuthContext);
+    const [loading, setLoading] = useContext(AuthContext);
+    
+  
 
-   const onChange = (e) => {
-
-        setEmail(e.target.value) ;
-    }
-
-    const handleForgotPassword = async () => {
+    const handleForgotPassword = async (e) => {
         setLoading(true)
+
+        const { data, error } = await supabase.api.resetPasswordForEmail(e.target.value);
         
-        const { data, error } = await supabase.api.resetPasswordForEmail(email);
-        if (error) {
-            setError(error.message)
-        }
-        setLoading(false);
     };
 
     return (
@@ -39,7 +31,6 @@ export function ForgotPasswordForm(props) {
                         autoComplete="email"
                         name="email"
                         icon={<IconMail size={21} stroke={'#666666'} />}
-                        onChange={onChange}
                     />
                 </Space>
                 <Space direction={'vertical'}>
@@ -50,7 +41,6 @@ export function ForgotPasswordForm(props) {
                         style={{ "backgroundColor": "#f58f98", "width": "100%" }}
                         icon={<IconMail size={21} />}
                         loading={loading}
-                        onClick={handleForgotPassword}
                         block
                         >
                         
@@ -61,4 +51,3 @@ export function ForgotPasswordForm(props) {
         </>
     );
 };
-

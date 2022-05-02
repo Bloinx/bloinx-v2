@@ -1,23 +1,26 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import { LoginForm } from "./LoginForm";
-import { SignupForm } from "./SignupForm";
-import { ForgotPasswordForm } from "./ForgotPasswordForm";
-import { AccountContext } from "./accountContext";
+import  LoginForm from "./LoginForm";
+import  SignupForm from "./SignupForm";  
+import  ForgotPasswordForm from "./ForgotPasswordForm";
+import { AuthContext } from "./authContext";
 
 
-export function Form(props) {
+export default function Form() {
     
-    const [active, setActive] = useState("signin");
-    const switchToSignup = () => {
-        setActive("signup");
-    };
+    const {active, setActive} = useState('signin');
+    
+
+    
+   
 
     const switchToSignin = () => {
         setActive("signin");
     };
-
+ const switchToSignup = () => {
+        setActive("signup");
+    };
     
     const switchToForgotPassword = () => {
         setActive("forgotPassword");
@@ -28,11 +31,14 @@ export function Form(props) {
 
     return (
         <>
-            <AccountContext.Provider value={contextValue}>
-                {active === "signin" && (<LoginForm />)}
-                {active === "signup" && (<SignupForm />)}
-                {active === "forgotPassword" && (<ForgotPasswordForm />)}
-            </AccountContext.Provider>
+        
+            <AuthContext.Provider value={ contextValue }>
+                
+                {active === "signin" && <LoginForm  />}          
+                {active === "signup" && <SignupForm  />} 
+                {active === "forgotPassword" && <ForgotPasswordForm  />}
+            
+            </AuthContext.Provider>
         </>
     );
 };

@@ -7,35 +7,32 @@ import {
     IconMail,
     IconLock
 } from '@supabase/ui';
-import { AccountContext } from "./accountContext";
+import { AuthContext } from "./authContext";
 import supabase from "../../supabase";
 
-export function LoginForm(props) {
-    const { switchToSignup } = useContext(AccountContext);
-    const { switchToForgotPassword } = useContext(AccountContext);
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState('')
+export default function LoginForms(props) {
+    const { switchToSignup } = useContext(AuthContext);
+    const { switchToForgotPassword } = useContext(AuthContext);
+    const [loading, setLoading] = useState(false); 
 
-    const handleProviderSignIn = async () => {
-        setLoading(true)
-        const { error } = await supabase.auth.signIn(
-            {  })
-        if (error) setError(error.message)
-        setLoading(false)
-    
-    }
+
+
+
 
 
     return (
         <>
-            <Space direction={'vertical'}>
+
+<form>            <Space direction={'vertical'}>
                 <Space direction={'vertical'}>
                     <Input
                         label="Usdsuario"
-                        style={{ width: '100%' }}
+ 
+                       style={{ width: '100%' }}
                         autoComplete="email"
                         icon={<IconMail size={21} stroke={'#666666'} />}
                         size="tiny"
+                        name="email"
                     />
                     <Input
                         label="Contraseña"
@@ -43,6 +40,7 @@ export function LoginForm(props) {
                         autoComplete="current-password"
                         icon={<IconKey stroke={'#666666'} />}
                         size="tiny"
+                        name="password"
                     />
                 </Space>
                 <Space direction={'vertical'}>
@@ -76,9 +74,11 @@ export function LoginForm(props) {
                         ¿Olvidaste tu contraseña?
                     </Button>
 
-                </Space>    
+                </Space>  
+
             </Space>
-                
+	</form>                
         </>
     );
-}
+};
+

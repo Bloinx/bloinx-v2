@@ -12,12 +12,12 @@ import {
     IconPhone
 } from '@supabase/ui';
 
-import { AccountContext } from "./accountContext";
+import { AuthContext } from "./authContext";
 
 
 
-export function SignupForm(props)  {
-    const { switchToSignin } = useContext(AccountContext);
+export default function  SignupForm (props) {
+    const { switchToSignin } = useContext(AuthContext);
 
     return (
         <>
@@ -105,3 +105,4 @@ export function SignupForm(props)  {
                     </>
     );
 };
+

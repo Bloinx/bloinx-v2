@@ -1,9 +1,9 @@
 import React from "react";
-import {Form} from "./Form";
+import Form from "./Form";
 import styles from "./index.module.scss";
 import logo from "../../assets/bloinxLogo.png";
 
-const Login =( {props} ) => { 
+const Login =() => { 
   return (
     <div className={styles.Login}>
       <div className={styles.Login_Card}>
@@ -13,7 +13,7 @@ const Login =( {props} ) => {
             <span className={styles.Login_Title}>Iniciar sesión</span>
           </div>
           <div className={styles.Login_Card_Content_Form}>
-          <Form/>
+          <Form />
           </div>
         </div>
       </div>
