@@ -39,6 +39,7 @@ const publicRoutes = [
     ),
   },
 
+
 ];
 
 const privateRoutes = [

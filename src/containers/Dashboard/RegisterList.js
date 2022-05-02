@@ -4,7 +4,7 @@ import IconButton from "@mui/material/IconButton";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useNavigate } from "react-router-dom";
 
-import { getRoundsList } from "./utils";
+import { getRoundsPosition, getRoundsData } from "./utils";
 import styles from "./DataList.module.scss";
 
 function RegisterList() {
@@ -13,10 +13,11 @@ function RegisterList() {
   const [RegisterList, setRegisterList] = useState([]);
 
   const getRegister = () => {
-    getRoundsList()
+    getRoundsPosition()
       .then((data) => {
         console.log(data);
         setRegisterList(data);
+        getRoundsData(data);
       })
       .catch((err) => {
         console.log(err);

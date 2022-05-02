@@ -3,48 +3,84 @@ import config from "../../config.sg.web3";
 
 import getAdmin from "../../utils/getAdmin";
 import getAddressOrderList from "../../utils/getAddressOrderList";
+import { data } from "browserslist";
 
-export const getRoundsList = async () => {
+export const getRoundsPosition = async () => {
+  const ac = new AbortController()
+
   const user = supabase.auth.user();
   //user.id
   const { data, error } = await supabase
-    .from("Rounds")
+    .from("position_by_round")
     // .select("*, positions(name, registrationDate)")
     .select()
-    .eq("create_by_user", 'FIaC1UftjpRNZsGoNj3qcEEscSx2')
-   // .order("created_at", { ascending: true });
+    .eq("uid", "FIaC1UftjpRNZsGoNj3qcEEscSx2")
+    .then(res => {
+      console.log('res', res)
+      return res
+    })
+  // .order("created_at", { ascending: true });
 
   console.log({ data, error });
-//contrato con ronda: 0x92f7AC475276Cc12546F54Cb9687B9714ca32e2d
-  return new Promise((resolve, reject) => {
-    let dataProcessed = [];
-    let count = data.length - 1;
 
-    if (error) {
-      reject(error);
+  return data
+
+  // return new Promise((resolve, reject) => {
+
+
+  //   if (data != []) {
+  //     resolve(data);
+  //   }else{
+  //     if(error){
+  //       reject(error)
+  //     }
+  //   }
+
+    // data.forEach(async (round) => {
+    //   const { methods } = config(round.contract);
+
+    //   const admin = await getAdmin(methods);
+    //   const orderList = await getAddressOrderList(methods);
+
+    //   const isAdmin = admin === localStorage.getItem("currentWallet");
+    //   const isRegistered = !!orderList.find(
+    //     ({ address }) =>
+    //       address.toLowerCase() ===
+    //       localStorage.getItem("currentWallet")
+    //       // localStorage.getItem("currentWallet").toLowerCase()
+    //   );
+
+    //   dataProcessed = [...dataProcessed, { ...round, isRegistered, isAdmin }];
+
+    //   if (count === 0) {
+    //     resolve(dataProcessed);
+    //   } else {
+    //     count = count - 1;
+    //   }
+    // });
+  //});
+};
+
+
+export const getRoundsData = async (dataRoundPosition) => {
+
+  let allData = [];
+  let err;
+  dataRoundPosition.forEach(async (positionRound) => {
+    const { data, error } = await supabase
+      .from("Rounds")
+      .select()
+      .eq("id_round_ref", positionRound.id_round_ref);
+
+    if(data){
+      allData.push(positionRound);
+      console.log(data);
     }
 
-    data.forEach(async (round) => {
-      const { methods } = config(round.contract);
+    err=error;
 
-      const admin = await getAdmin(methods);
-      const orderList = await getAddressOrderList(methods);
-
-      const isAdmin = admin === localStorage.getItem("currentWallet");
-      const isRegistered = !!orderList.find(
-        ({ address }) =>
-          address.toLowerCase() ===
-          localStorage.getItem("currentWallet")
-          // localStorage.getItem("currentWallet").toLowerCase()
-      );
-
-      dataProcessed = [...dataProcessed, { ...round, isRegistered, isAdmin }];
-
-      if (count === 0) {
-        resolve(dataProcessed);
-      } else {
-        count = count - 1;
-      }
-    });
   });
+
+return allData;
+
 };
