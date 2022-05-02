@@ -4,7 +4,7 @@ import IconButton from "@mui/material/IconButton";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useNavigate } from "react-router-dom";
 
-import { getRoundsList } from "./utils";
+import { getRoundsPosition, getRoundsData } from "./utils";
 import styles from "./DataList.module.scss";
 
 function RoundsList() {
@@ -12,21 +12,32 @@ function RoundsList() {
 
   const [roundsList, setRoundsList] = useState([]);
 
-  const getRounds = () => {
-    getRoundsList()
-      .then((data) => {
-        console.log(data);
-        setRoundsList(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const getRounds = async() => {
+    debugger;
+    const datapos = await getRoundsPosition();
+    const data = await getRoundsData(datapos);
+    roundsList.push(data[0])
+    console.log(roundsList)
+    // setRoundsList(data);
+
+    // console.log('data', roundsList)
+      // .then((data) => {
+      //   console.log(data);
+
+      //   getRoundsData(data).then((res)=>{
+
+      //     setRoundsList(res);
+          
+      //   });
+      // })
+      // .catch((err) => {
+      //   console.log(err);
+      // });
   };
 
   useEffect(() => {
     getRounds();
-  }, [
-  ]);
+  }, []);
 
   return (
     <Card variant="outlined" className={styles.DataBorder}>
@@ -35,26 +46,29 @@ function RoundsList() {
           <div className={styles.DataListHeader}>Nombre de Ronda</div>
           <div className={styles.DataListHeader}>Próximo Pago</div>
         </div>
-        {roundsList.map((round, index) => (
-          <div key={index} className={styles.DataListRow}>
+        {roundsList?.map((round, index) => (
+            <div key={index} className={styles.DataListRow}>
             <div className={styles.DataListItem}>
-              {round.isAdmin && !round.isRegistered && "Nueva ronda vacia"}
-              {round.isAdmin && round.isRegistered && round.positions[0]?.name}
+              {round.id_round_ref}
+              {/* {round.isAdmin && !round.isRegistered && "Nueva ronda vacia"}
+              {round.isAdmin && round.isRegistered && round.id_round_ref} */}
             </div>
             <div className={styles.DataListItem}>
-              {round.isAdmin && !round.isRegistered && "Personaliza"}
-              {round.isAdmin && round.isRegistered && "En espera de iniciar"}
+              {'ghoasdlkasd'}
+              {/* {round.isAdmin && !round.isRegistered && "Personaliza"}
+              {round.isAdmin && round.isRegistered && "En espera de iniciar"} */}
               <IconButton
                 onClick={
-                  !round.isRegistered
-                    ? () => navigate(`/register/${round.id}`)
-                    : () => navigate(`/round-detail/${round.id}`)
+                  round
+                    ? () => navigate(`/register/${round.id_round}`)
+                    : () => navigate(`/round-detail/${round.id_round}`)
                 }
               >
                 <ChevronRightIcon />
               </IconButton>
             </div>
           </div>
+
         ))}
       </div>
     </Card>

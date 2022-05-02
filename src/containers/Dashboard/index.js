@@ -28,15 +28,15 @@ function Dashboard() {
         <Typography variant="h5" component="p">
           Mis Registros pendientes
         </Typography>
-        <RegisterList />
+        {/* <RegisterList /> */}
         <br/>
         <Typography variant="h5" component="p">
           Mis Billetera Digital
         </Typography>
-        <WalletList />
+        {/* <WalletList /> */}
     </Markup>
   );
 }
 
-export default React.memo(withAuthProvider(Dashboard));
-//export default React.memo(Dashboard);
+//export default React.memo(withAuthProvider(Dashboard));
+export default React.memo(Dashboard);
