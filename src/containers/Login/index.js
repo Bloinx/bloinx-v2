@@ -1,9 +1,31 @@
-import React from "react";
-import Form from "./Form";
-import styles from "./index.module.scss";
-import logo from "../../assets/bloinxLogo.png";
+import React, { useState } from "react";
+//import Form from "./Form";
 
-const Login =() => { 
+import logo from "../../assets/bloinxLogo.png";
+import  LoginForm from "./LoginForm";
+import  SignupForm from "./SignupForm";  
+import  ForgotPasswordForm from "./ForgotPasswordForm";
+import { AuthContext } from "./authContext";
+import styles from "./index.module.scss";
+        
+function Login(props){ 
+  const [active,setActive ]= useState("signin");
+
+
+        const switchToSignin = () => {
+            setActive("signin");
+        };
+        const switchToSignup = () => {
+            setActive("signup");
+        };
+        
+        const switchToForgotPassword = () => {
+            setActive("forgotPassword");
+        };
+
+        const contextValue = { switchToSignup, switchToSignin, switchToForgotPassword };
+
+
   return (
     <div className={styles.Login}>
       <div className={styles.Login_Card}>
@@ -13,7 +35,12 @@ const Login =() => {
             <span className={styles.Login_Title}>Iniciar sesión</span>
           </div>
           <div className={styles.Login_Card_Content_Form}>
-          <Form />
+          <AuthContext.Provider value={ contextValue }>
+            {active === "signin" && <LoginForm  />}
+            {active === "signup" && <SignupForm  />}
+            {active === "forgotPassword" && <ForgotPasswordForm  />}
+          </AuthContext.Provider>
+
           </div>
         </div>
       </div>
