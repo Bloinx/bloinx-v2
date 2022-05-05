@@ -10,19 +10,23 @@ import supabase from "../../supabase";
 
 export default function  ForgotPasswordForm(props) {    
     const { switchToSignin } = useContext(AuthContext);
-    const [loading, setLoading] = useContext(AuthContext);
     
   
 
     const handleForgotPassword = async (e) => {
-        setLoading(true)
+        const { data, error } = await supabase.auth.resetPasswordForEmail(e.target.value) 
+        if (data) {
+            console.log("enviado");
+        }
+        if (error) {
+            console.log("error");
+        }
 
-        const { data, error } = await supabase.api.resetPasswordForEmail(e.target.value);
+
         
     };
 
     return (
-        <>
             <Space direction={'vertical'}>
                 <Space direction={'vertical'}>
                     <Input
@@ -40,14 +44,15 @@ export default function  ForgotPasswordForm(props) {
                         size="tiny"
                         style={{ "backgroundColor": "#f58f98", "width": "100%" }}
                         icon={<IconMail size={21} />}
-                        loading={loading}
-                        block
+                        onClick={handleForgotPassword}
+                             block
                         >
-                        
                         Enviar
-                        </Button>
+                    </Button>
                 </Space>
             </Space>
-        </>
     );
 };
+// import React, { useContext } from "react";
+// import {
+//     Input,

@@ -8,54 +8,57 @@ import {
     IconLock
 } from '@supabase/ui';
 import { AuthContext } from "./authContext";
-import supabase from "../../supabase";
+import <su></su>pabase from "../../supabase";
 
 export default function LoginForms(props) {
-    const { switchToSignup } = useContext(AuthContext);
-    const { switchToForgotPassword } = useContext(AuthContext);
-    const [loading, setLoading] = useState(false); 
-    const [error, setError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const {switchToSignup } = useContext(AuthContext);
+    const {switchToForgotPassword } = useContext(AuthContext);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const OnChangeInput = (e) => {
+    
+    switch (e.target.name) {
+        console.table(e.target);
+        case "email":
+            setEmail(e.target.value);
 
-    const handleLogin = async (e) => {
-        setLoading(true);
-        setError(false);
-        setErrorMessage("");
-        const { data, error } = await supabase.api.login(email, password);  
-        if (error) {
-            setError(true);
-            setErrorMessage(error.message);
-            setLoading(false);
-        } else {
-            setLoading(false);
-            props.history.push("/");
+            break;
+        case "password":
+            setPassword(e.target.value);
+
+            break;
+        default:
+            break;
+    }
+
+    }
+
+        
+    
+
+    const handleLogin = async () => {
+        console.log(email);
+        //setLoading(true);
+        const { user, error } = await supabase.auth.signIn({
+          email,
+          password,
+        });
+        if (user) {
+        //go to dashboard\
         }
-    };
-    const onChange = (e) => {
-        switch (e.target.name) {    
-            case "email":
-                setEmail(e.target.value);
-                break;
-            case "password":
-                setPassword(e.target.value);
-                break;
-            default:
-                break;
-        }   
-
-    };
+        if (error) {
+          //setErrorD""""ata({ status: true, data: error.message });
+         console.log("error");
+        }
+      };
     
     
-
-
 
 
     return (
         <>
 
-<form>            <Space direction={'vertical'}>
+           <Space direction={'vertical'}>
                 <Space direction={'vertical'}>
                     <Input
                         label="Usdsuario"
@@ -66,7 +69,7 @@ export default function LoginForms(props) {
                         size="tiny"
                         name="email"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value}
+                        onChange={OnChangeInput}
                     />
                     <Input
                         label="Contraseña"
@@ -75,6 +78,8 @@ export default function LoginForms(props) {
                         icon={<IconKey stroke={'#666666'} />}
                         size="tiny"
                         name="password"
+                        value={password}
+                        onChange={OnChangeInput}
                     />
                 </Space>
                 <Space direction={'vertical'}>
@@ -84,8 +89,8 @@ export default function LoginForms(props) {
                         size="tiny"
                         style={{ "backgroundColor": "#f58f98", "width": "100%" }}
                         icon={<IconLock size={21} />}
-                        loading={loading}
                         onClick={handleLogin}
+                        loading={false}
                         block
                     >
                         Entrar
@@ -94,25 +99,29 @@ export default function LoginForms(props) {
                 <Space direction="horizontal" style={{ textAlign: 'center' }} size ={2}>
                     <Button 
                         type="link"
-                        size="tiny"
                         onClick={switchToSignup}
-                        style={{ "color": "#f58f98" }}                    
+                        style={{ "color": "#f58f98" }}
+                        size="tiny"
+                        block
                     >
                         ¿No tienes una cuenta?
                     </Button>
                     <Button
                         type="link"
+                        onClick={switchToForgotPassword}
+                        style={{ "color": "#f58f98" }}
                         size="tiny"
-                        onClick={switchToForgotPassword}  
-                        style={{ "color": "#f58f98" }}   
+                        block
                     >
+
                         ¿Olvidaste tu contraseña?
                     </Button>
+
+                    
 
                 </Space>  
 
             </Space>
-	</form>                
         </>
     );
 };
