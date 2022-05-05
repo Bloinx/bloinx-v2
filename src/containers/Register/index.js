@@ -14,11 +14,11 @@ import {
   Typography,
 } from "@mui/material";
 import Invite from "./Invite";
-import { color } from "@mui/system";
 
 //import RegisterStepper from "../../components/Stepper/index";
 
 function Register() {
+  //Siguiente paso habilitado setNextStep
   function getSteps() {
     return ["Turno", "Aprovar", "Pagar", "Invitar"];
   }
@@ -26,27 +26,32 @@ function Register() {
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return <Form handleNext={handleNext} handleBack={handleBack} />
+        return <Form handleNext={handleNext} handleBack={handleBack} />;
       case 1:
-        return <Approve handleNext={handleNext} handleBack={handleBack} />;
-      case 2:
         return (
-          /*           <Status
+          <Approve
             handleNext={handleNext}
             handleBack={handleBack}
-            activeStep={activeStep}
-            steps={steps}
-          /> */ <Status handleNext={handleNext} handleBack={handleBack} />
+            /* handlerOnSubmit={handlerOnSubmit} */
+          />
+        );
+      case 2:
+        return (
+          <Pay
+            handleNext={handleNext}
+            handleBack={handleBack}
+            /*  handlerOnSubmit={handlerOnSubmit} */
+          />
         );
       case 3:
         return (
-          /*           <Invite
+          <Invite
             handleNext={handleNext}
             handleBack={handleBack}
+            /* handlerOnSubmit={handlerOnSubmit} */
             activeStep={activeStep}
             steps={steps}
-          /> */
-          <h1>Aqui va el Invite</h1>
+          />
         );
       default:
         return "Unknown step";
@@ -70,7 +75,6 @@ function Register() {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
-
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
   };
@@ -154,7 +158,6 @@ function Register() {
                   Skip
                 </Button>
               )}
-
               <Button variant="contained" color="primary" onClick={handleNext}>
                 {activeStep === steps.length - 1 ? "Finish" : "Next"}
               </Button>

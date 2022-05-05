@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Formik } from 'formik';
-import MenuItem from '@mui/material/MenuItem';
-import Button from '@mui/material/Button';
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useParams, useNavigate } from "react-router-dom";
+import { Formik } from "formik";
+import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
 
-import PageHeader from '../../components/PageHeader';
-import TextField from '../../components/TextField';
-import Select from '../../components/Select';
-import InputParticipantSelect from '../../components/InputParticipantSelect/InputParticipantSelect';
+import PageHeader from "../../components/PageHeader";
+import TextField from "../../components/TextField";
+import Select from "../../components/Select";
+import InputParticipantSelect from "../../components/InputParticipantSelect/InputParticipantSelect";
 
-import { validations } from './validations';
-import { getRegisterDetail } from './utils';
-import { Grid, IconButton, Typography } from '@mui/material';
-import { ArrowBackIosOutlined } from '@mui/icons-material';
-import ButtonOnlyOneStep from '../../components/ButtonOnlyOneStep';
+import { validations } from "./validations";
+import { getRegisterDetail } from "./utils";
+import { Grid, IconButton, Typography } from "@mui/material";
+import ButtonOnlyOneStep from "../../components/ButtonOnlyOneStep";
 
 function Form({ setDataForm }) {
   const { t } = useTranslation();
@@ -33,7 +32,7 @@ function Form({ setDataForm }) {
 
   const handlerOnSubmit = (data) => {
     setDataForm({ form: data, roundData });
-    navigate('/approve');
+    navigate("/approve");
   };
 
   useEffect(() => {
@@ -43,8 +42,8 @@ function Form({ setDataForm }) {
   return (
     <Formik
       initialValues={{
-        name: '',
-        motive: '',
+        name: "",
+        motive: "",
         position: 1,
       }}
       validate={validations}
@@ -56,13 +55,13 @@ function Form({ setDataForm }) {
 
         return (
           <form onSubmit={handleSubmit}>
-            <PageHeader title={t('createRound.titleConfirm')} />
+            <PageHeader title={t("createRound.titleConfirm")} />
             <TextField
               id="outlined-basic"
               variant="outlined"
               name="name"
               size="small"
-              label={t('createRound.form.label.name')}
+              label={t("createRound.form.label.name")}
               value={values.name}
               onChange={handleChange}
               error={touched.name && errors.name}
@@ -77,7 +76,7 @@ function Form({ setDataForm }) {
               value={values.motive}
               fullWidth
               size="small"
-              label={t('createRound.form.label.motivation')}
+              label={t("createRound.form.label.motivation")}
               error={touched.motive && errors.motive}
               helperText={touched.motive && errors.motive}
             >
@@ -90,7 +89,7 @@ function Form({ setDataForm }) {
               <MenuItem value="education">Educación</MenuItem>
             </Select>
             <InputParticipantSelect
-              label={t('createRound.form.label.turn')}
+              label={t("createRound.form.label.turn")}
               name="position"
               onChange={handleChange}
               value={values.position}
@@ -102,10 +101,10 @@ function Form({ setDataForm }) {
               }
               error={errors.participants}
             />
-            <Grid container rowSpacing={1} justifyContent={'center'}>
+            <Grid container rowSpacing={1} justifyContent={"center"}>
               <Grid item>
                 <ButtonOnlyOneStep
-                  label={t('createRound.actions.continue')}
+                  label={t("createRound.actions.continue")}
                   onClick={handlerOnSubmit}
                 />
               </Grid>
