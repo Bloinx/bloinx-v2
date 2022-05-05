@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
     Input,
     Button,
@@ -8,62 +9,64 @@ import {
     IconLock
 } from '@supabase/ui';
 import { AuthContext } from "./authContext";
-import <su></su>pabase from "../../supabase";
+import supabase from "../../supabase";
 
 export default function LoginForms(props) {
-    const {switchToSignup } = useContext(AuthContext);
-    const {switchToForgotPassword } = useContext(AuthContext);
+    const { switchToSignup } = useContext(AuthContext);
+    const { switchToForgotPassword } = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
     const OnChangeInput = (e) => {
-    
-    switch (e.target.name) {
-        console.table(e.target);
-        case "email":
-            setEmail(e.target.value);
 
-            break;
-        case "password":
-            setPassword(e.target.value);
+        switch (e.target.name) {
+            case "email":
+                setEmail(e.target.value);
 
-            break;
-        default:
-            break;
+                break;
+            case "password":
+                setPassword(e.target.value);
+
+                break;
+            default:
+                break;
+        }
+
     }
 
-    }
 
-        
-    
+
 
     const handleLogin = async () => {
-        console.log(email);
+ 
         //setLoading(true);
-        const { user, error } = await supabase.auth.signIn({
-          email,
-          password,
-        });
+        const { user, error } = await supabase.auth.signIn({email, password});
+        console.log(user);  
+        console.log(error);
         if (user) {
-        //go to dashboard\
+            console.log("sesion iniciada");
+            navigate("/register");
+            //go to dashboard\
         }
         if (error) {
-          //setErrorD""""ata({ status: true, data: error.message });
-         console.log("error");
+            //setErrorD""""ata({ status: true, data: error.message });
+            console.log("error");
         }
-      };
-    
-    
+    };
+
+
 
 
     return (
         <>
 
-           <Space direction={'vertical'}>
+            <Space direction={'vertical'}>
                 <Space direction={'vertical'}>
                     <Input
                         label="Usdsuario"
- 
-                       style={{ width: '100%' }}
+
+                        style={{ width: '100%' }}
                         autoComplete="email"
                         icon={<IconMail size={21} stroke={'#666666'} />}
                         size="tiny"
@@ -96,8 +99,8 @@ export default function LoginForms(props) {
                         Entrar
                     </Button>
                 </Space>
-                <Space direction="horizontal" style={{ textAlign: 'center' }} size ={2}>
-                    <Button 
+                <Space direction="horizontal" style={{ textAlign: 'center' }} size={2}>
+                    <Button
                         type="link"
                         onClick={switchToSignup}
                         style={{ "color": "#f58f98" }}
@@ -117,9 +120,9 @@ export default function LoginForms(props) {
                         ¿Olvidaste tu contraseña?
                     </Button>
 
-                    
 
-                </Space>  
+
+                </Space>
 
             </Space>
         </>

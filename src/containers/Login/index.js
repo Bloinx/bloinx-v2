@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 //import Form from "./Form";
-import styles from "./index.module.scss";
+
 import logo from "../../assets/bloinxLogo.png";
 import  LoginForm from "./LoginForm";
 import  SignupForm from "./SignupForm";  
 import  ForgotPasswordForm from "./ForgotPasswordForm";
 import { AuthContext } from "./authContext";
-
+import styles from "./index.module.scss";
         
-const Login =(props) => { 
+function Login(props){ 
   const [active,setActive ]= useState("signin");
 
 
@@ -16,7 +16,6 @@ const Login =(props) => {
             setActive("signin");
         };
         const switchToSignup = () => {
-            console.log(active);
             setActive("signup");
         };
         

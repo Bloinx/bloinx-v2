@@ -49,6 +49,19 @@ export default function  ForgotPasswordForm(props) {
                         >
                         Enviar
                     </Button>
+                    <Button
+                        htmlType="Cancelar"
+                        type="primary"
+                        size="tiny"
+                        style={{ "backgroundColor": "#f58f98", "width": "100%" }}
+                        icon={<IconMail size={21} />}
+                        onClick={switchToSignin}
+                        block
+                    >   
+
+                        Cancelar
+                    </Button>
+                    
                 </Space>
             </Space>
     );
