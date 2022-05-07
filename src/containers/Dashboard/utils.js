@@ -15,10 +15,7 @@ export const getRoundsPosition = async () => {
     // .select("*, positions(name, registrationDate)")
     .select()
     .eq("uid", "FIaC1UftjpRNZsGoNj3qcEEscSx2")
-    .then(res => {
-      console.log('res', res)
-      return res
-    })
+
   // .order("created_at", { ascending: true });
 
   console.log({ data, error });
