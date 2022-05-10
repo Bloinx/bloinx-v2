@@ -35,20 +35,19 @@ function RegisterList() {
           <div className={styles.DataListHeader}>Nombre de Ronda</div>
           <div className={styles.DataListHeader}>Creada por:</div>
         </div>
-        {RegisterList.map((round) => (
-          <div key={round.contract} className={styles.DataListRow}>
+        {RegisterList.map((round, index) => (
+          <div key={index} className={styles.DataListRow}>
             <div className={styles.DataListItem}>
-              {round.isAdmin && !round.isRegistered && "Nueva ronda vacia"}
-              {round.isAdmin && round.isRegistered && round.positions[0]?.name}
+              {round.alias}
+
             </div>
             <div className={styles.DataListItem}>
-              {round.isAdmin && !round.isRegistered && "Personaliza"}
-              {round.isAdmin && round.isRegistered && "En espera de iniciar"}
+              {round.id_round_ref}
               <IconButton
                 onClick={
                   !round.isRegistered
-                    ? () => navigate(`/register/${round.id}`)
-                    : () => navigate(`/round-detail/${round.id}`)
+                    ? () => navigate(`/register/${round.id_round_ref}`)
+                    : () => navigate(`/round-detail/${round.id_round_ref}`)
                 }
               >
                 <ChevronRightIcon />

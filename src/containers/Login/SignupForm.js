@@ -14,11 +14,12 @@ import {
 import supabase from "../../supabase";
 
 import { AuthContext } from "./authContext";
+import { useNavigate } from "react-router-dom";
 
 
 export default function SignupForm(props) {
     const { switchToSignin } = useContext(AuthContext);
-
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [nombre, setNombre] = useState('');

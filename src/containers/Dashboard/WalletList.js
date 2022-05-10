@@ -35,20 +35,18 @@ function WalletList() {
           <div className={styles.DataListHeader}>Moneda digital</div>
           <div className={styles.DataListHeader}>Balance</div>
         </div>
-        {WalletList.map((round) => (
-          <div key={round.contract} className={styles.DataListRow}>
+        {WalletList.map((round, index) => (
+          <div key={index} className={styles.DataListRow}>
             <div className={styles.DataListItem}>
-              {round.isAdmin && !round.isRegistered && "Nueva ronda vacia"}
-              {round.isAdmin && round.isRegistered && round.positions[0]?.name}
+              {round.id_round_ref}
             </div>
             <div className={styles.DataListItem}>
-              {round.isAdmin && !round.isRegistered && "Personaliza"}
-              {round.isAdmin && round.isRegistered && "En espera de iniciar"}
+              {round.id}
               <IconButton
                 onClick={
                   !round.isRegistered
-                    ? () => navigate(`/register/${round.id}`)
-                    : () => navigate(`/round-detail/${round.id}`)
+                    ? () => navigate(`/register/${round.id_round_ref}`)
+                    : () => navigate(`/round-detail/${round.id_round_ref}`)
                 }
               >
                 <ChevronRightIcon />
