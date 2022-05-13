@@ -7,10 +7,14 @@ import  SignupForm from "./SignupForm";
 import  ForgotPasswordForm from "./ForgotPasswordForm";
 import { AuthContext } from "./authContext";
 import styles from "./index.module.scss";
+import { MpSharp } from "@mui/icons-material";
+import {
+  Alert
+} from '@supabase/ui';
         
 function Login(props){ 
   const [active,setActive ]= useState("signin");
-
+  const [msg, setMsg] = useState('');
 
         const switchToSignin = () => {
             setActive("signin");
@@ -18,12 +22,33 @@ function Login(props){
         const switchToSignup = () => {
             setActive("signup");
         };
-        
         const switchToForgotPassword = () => {
             setActive("forgotPassword");
         };
 
-        const contextValue = { switchToSignup, switchToSignin, switchToForgotPassword };
+       const setMessage=(message, msgType ) =>{
+       let messageFormatted = '';
+
+       switch(msgType)
+       {
+            case 1:
+                messageFormatted= '<Alert title="Hecho" withIcon> '+ message +'</Alert>' ;
+                break;
+
+            case 2:
+                messageFormatted= '<Alert title="Error" variant="danger"> '+ message +'</Alert>' ;
+                break;
+            default:
+                    messageFormatted='';
+
+
+
+       }
+
+        setMsg(messageFormatted)
+       };
+        const contextValue = { switchToSignup, switchToSignin, switchToForgotPassword , setMessage};
+
 
 
   return (
@@ -35,7 +60,9 @@ function Login(props){
             <span className={styles.Login_Title}>Iniciar sesión</span>
           </div>
           <div className={styles.Login_Card_Content_Form}>
+
           <AuthContext.Provider value={ contextValue }>
+           { msg.lengt>0 &&  <Alert title="Hecho" withIcon> '+ message +'</Alert>}
             {active === "signin" && <LoginForm  />}
             {active === "signup" && <SignupForm  />}
             {active === "forgotPassword" && <ForgotPasswordForm  />}

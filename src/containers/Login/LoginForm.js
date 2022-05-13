@@ -6,7 +6,8 @@ import {
     Space,
     IconKey,
     IconMail,
-    IconLock
+    IconLock,
+    Alert
 } from '@supabase/ui';
 import { AuthContext } from "./authContext";
 import supabase from "../../supabase";
@@ -14,6 +15,7 @@ import supabase from "../../supabase";
 export default function LoginForms(props) {
     const { switchToSignup } = useContext(AuthContext);
     const { switchToForgotPassword } = useContext(AuthContext);
+    const {setMessage} = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -23,21 +25,15 @@ export default function LoginForms(props) {
         switch (e.target.name) {
             case "email":
                 setEmail(e.target.value);
-
                 break;
             case "password":
                 setPassword(e.target.value);
-
                 break;
             default:
                 break;
         }
 
     }
-
-
-
-
     const handleLogin = async () => {
  
         //setLoading(true);
@@ -45,12 +41,13 @@ export default function LoginForms(props) {
         console.log(user);  
         console.log(error);
         if (user) {
-            console.log("sesion iniciada");
+             console.log("sesion iniciada");
+
             navigate("/register");
             //go to dashboard\
         }
         if (error) {
-            //setErrorD""""ata({ status: true, data: error.message });
+            setMessage(error.message,2);
             console.log("error");
         }
     };
