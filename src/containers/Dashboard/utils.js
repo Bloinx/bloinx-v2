@@ -18,7 +18,7 @@ export const getRoundsPosition = async () => {
 
   // .order("created_at", { ascending: true });
 
-  console.log({ data, error });
+  //console.log({ data, error });
 
   return data
 
@@ -59,25 +59,41 @@ export const getRoundsPosition = async () => {
 };
 
 
-export const getRoundsData = async (dataRoundPosition) => {
+// export const getRoundsData =  (dataRoundPosition) => {
 
-  let allData = [];
-  let err;
-  dataRoundPosition.forEach(async (positionRound) => {
-    const { data, error } = await supabase
-      .from("Rounds")
-      .select()
-      .eq("id_round_ref", positionRound.id_round_ref);
+//   let allData = [];
+//   let err;
+//   dataRoundPosition.forEach( (positionRound) => {
+//       getAll(positionRound).then((res)=>{
+//         console.log(res.contract);
+//         getNextPayment(dataRoundPosition, res)
+//         allData.push(res);
+        
+//       });
 
-    if(data){
-      allData.push(positionRound);
-      console.log(data);
-    }
+//   });
 
-    err=error;
+//   return allData;
+// };
+
+export const getRoundsData =  (dataRoundPosition) => {
+
+  dataRoundPosition.forEach( (positionRound) => {
+      getAll(positionRound).then((res)=>{
+       // getNextPayment(dataRoundPosition, res)
+        return res;
+      });
 
   });
-
-return allData;
-
 };
+
+
+const getAll = async (positionRound) =>{
+    const { data } = await supabase
+    .from("Rounds")
+    .select()
+    .eq("id_round_ref", positionRound.id_round_ref);
+
+return  data[0]
+}
+
