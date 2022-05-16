@@ -31,6 +31,8 @@ const publicRoutes = [
       </Suspense>
     ),
   },
+
+
 ];
 
 const privateRoutes = [

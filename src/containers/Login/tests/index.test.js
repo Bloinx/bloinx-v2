@@ -4,15 +4,41 @@ import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 
-import store from "../../../redux/store";
-import Login from "../index";
 
+import Login from "../index";
+//Render Test
 describe("<Login/>", () => {
   test("should render correctly using default props", () => {
     render(
       <BrowserRouter>
-        <Login />
+
+        <Login /> 
       </BrowserRouter>
-    );
+      ); 
+    expect(screen.getByText("Iniciar sesión")).toBeInTheDocument();
+    
+
   });
+
 });
+
+//inicio de sesion mensaje de error
+describe("<Login/>", () => {
+    test ("Login error message", async () => {
+      render(
+        <BrowserRouter>
+          <Login />
+        </BrowserRouter>
+      );
+      
+      const submitButton = screen.getAllByLabelText("Sign in");
+      const errorMessage = screen.getByText("Invalid login credentials");
+      
+      submitButton.click();
+      await waitFor(() => expect(errorMessage).toBeInTheDocument());  
+    });
+  });
+
+
+
+

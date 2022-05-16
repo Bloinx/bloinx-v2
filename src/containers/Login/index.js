@@ -1,44 +1,51 @@
-import React from "react";
-import styles from "./index.module.scss";
+import React, { useState } from "react";
+//import Form from "./Form";
+
 import logo from "../../assets/bloinxLogo.png";
-import { Auth, Typography, Button } from '@supabase/ui'
-import supabase from '../../supabase';
+import  LoginForm from "./LoginForm";
+import  SignupForm from "./SignupForm";  
+import  ForgotPasswordForm from "./ForgotPasswordForm";
+import { AuthContext } from "./authContext";
+import styles from "./index.module.scss";
+        
+function Login(props){ 
+  const [active,setActive ]= useState("signin");
 
-const Container = (props) => {
-  const { user } = Auth.useUser()
-  if (user)
-    return (
-      <>
-        <Typography.Text>Signed in: {user.email}</Typography.Text>
-        <Button block onClick={() => props.supabaseClient.auth.signOut()}>
-          Sign out
-        </Button>
-      </>
-    )
-  return props.children
-}
 
-const AuthBasic = () => {
-  return (                                                    
-    <Auth.UserContextProvider supabaseClient={supabase}>
-      <Container supabaseClient={supabase}>
-        <Auth supabaseClient={supabase}  />
-      </Container>
-    </Auth.UserContextProvider>
-  )
-}
+        const switchToSignin = () => {
+            setActive("signin");
+        };
+        const switchToSignup = () => {
+            setActive("signup");
+        };
+        
+        const switchToForgotPassword = () => {
+            setActive("forgotPassword");
+        };
 
-function Login() {
+        const contextValue = { switchToSignup, switchToSignin, switchToForgotPassword };
+
+
   return (
     <div className={styles.Login}>
-    <div className={styles.LoginTitle}>
-        <img src={logo} alt="Logo de bloinx" />
-      </div>
-      <div className={styles.LoginCard}>
-      <AuthBasic/>
+      <div className={styles.Login_Card}>
+        <div className={styles.Login_Card_Content}>
+          <div className={styles.Login_Card_Content_Header}>
+            <img src={logo} alt="logo" className={styles.Login_Icon} />
+            <span className={styles.Login_Title}>Iniciar sesión</span>
+          </div>
+          <div className={styles.Login_Card_Content_Form}>
+          <AuthContext.Provider value={ contextValue }>
+            {active === "signin" && <LoginForm  />}
+            {active === "signup" && <SignupForm  />}
+            {active === "forgotPassword" && <ForgotPasswordForm  />}
+          </AuthContext.Provider>
+
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-export default React.memo(Login);
+export default React.memo(Login); 
