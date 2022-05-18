@@ -4,29 +4,39 @@ import IconButton from "@mui/material/IconButton";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useNavigate } from "react-router-dom";
 
-import { getRoundsPosition, getRoundsData } from "./utils";
+import { getRoundsPosition } from "./utils";
 import styles from "./DataList.module.scss";
 import supabase from "../../supabase";
+import config from "../../config.sg.web3";
+
 
 function RoundsList() {
   const navigate = useNavigate();
 
   const [roundsList, setRoundsList] = useState([]);
+  const [roundsListData, setRoundsListData] = useState([]);
+  const [nextPaymentDate, setNextPaymentDate] = useState([]);
 
   const getRounds = async() => {
- 
     const datapos = await getRoundsPosition();
-   //const data = await getRoundsData(datapos);
     setRoundsList(datapos)
-    console.log(roundsList)
-    // setRoundsList(data);
+    // getDataContract(datapos);
+    getRoundsData(datapos);
   };
+
+  const getDataContract = (datapos) => {
+    getRoundsData(datapos);
+    //setRoundsListData(roundsData);
+  };
+
 
   useEffect(() => {
     getRounds();
   }, []);
 
-  const isAdminRound = () => {
+
+  const isAdminRound = (roundsListDataProp) => {
+   // console.log(roundsListDataProp);
     // const user = supabase.auth.user();
     // if(user.id == getCreateByUser()){
 
@@ -34,9 +44,56 @@ function RoundsList() {
     return true
   }
 
-  const getCreateByUser = async () =>{
-    const data = await getRoundsData(roundsList);
+  const getRoundsData =  (dataRoundPosition) => {
+
+    dataRoundPosition.forEach( (positionRound, index) => {
+        getAll(positionRound).then((res)=>{
+          getNextPayment(dataRoundPosition[index], res)
+          setRoundsListData((oldArray) => [...oldArray, res]);
+        });
+
+    });
+  };
+
+
+  const getAll = async (positionRound) =>{
+    const { data } = await supabase
+    .from("Rounds")
+    .select()
+    .eq("id_round_ref", positionRound.id_round_ref);
+
+  return  data[0]
   }
+
+  const addSeconds = (numOfSeconds, date = new Date()) => {
+    date.setSeconds(date.getSeconds() + numOfSeconds);
+  
+    return date;
+  }
+
+  const getNextPayment = async (userPositionRound, roundsData) => {
+  
+    const { methods } = config(roundsData.contract);
+   // console.log(methods);
+    const res = await methods.payTime().call();
+    const date = new Date(roundsData.created_at);
+    const realPayTime = parseInt(res);
+    const realPosition = parseInt(userPositionRound.position);
+    const realTime = realPayTime*realPosition;
+    const nextPayment = addSeconds(realTime, date);
+    let day = nextPayment.getDate()
+    let month = nextPayment.getMonth() + 1
+    let year = nextPayment.getFullYear()
+
+    if(month < 10){
+      setNextPaymentDate((oldArray) => [...oldArray, `${day}-0${month}-${year}`]);
+    }else{
+      setNextPaymentDate((oldArray) => [...oldArray, `${day}-${month}-${year}`]);
+    }
+  
+  return roundsData;
+  
+  };
 
   return (
     <Card variant="outlined" className={styles.DataBorder}>
@@ -49,14 +106,12 @@ function RoundsList() {
             <div key={index} className={styles.DataListRow}>
             <div className={styles.DataListItem}>
               {round.alias}
-              {/* {round.isAdmin && !round.isRegistered && "Nueva ronda vacia"}
-              {round.isAdmin && round.isRegistered && round.id_round_ref} */}
             </div>
             <div className={styles.DataListItem}>
-              {'Next Payment:'}
+              {nextPaymentDate[index]?.toString()}
               <IconButton
                 onClick={
-                  isAdminRound()
+                  isAdminRound(roundsListData[index]?.created_by_user)
                     ? () => navigate(`/register/${round.id_round_ref}`)
                     : () => navigate(`/round-detail/${round.id_round_ref}`)
                 }
