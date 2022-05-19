@@ -1,7 +1,7 @@
 import supabase from "../../supabase";
 import config, {
-  MAIN_FACTORY_FUJI_TEST_NET,
-  MIM_TOKEN_FUJI_TEST_NET,
+  MAIN_FACTORY_ALFAJORES,
+  MAIN_FACTORY_CELO_MAINNET,
 } from "../../config.main.web3";
 
 const setCreateRound = async ({
@@ -21,11 +21,11 @@ const setCreateRound = async ({
         saving,
         groupSize,
         payTime,
-        MIM_TOKEN_FUJI_TEST_NET
+        MAIN_FACTORY_CELO_MAINNET
       )
       .send({
         from: walletAddress,
-        to: MAIN_FACTORY_FUJI_TEST_NET,
+        to: MAIN_FACTORY_ALFAJORES,
       })
       .once("receipt", async (receipt) => {
         const contract =

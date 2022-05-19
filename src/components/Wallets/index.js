@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Drawer from "@mui/material/Drawer";
 import Typography from "@mui/material/Typography";
 import detectEthereumProvider from "@metamask/detect-provider";
 import { CubeSpinner } from "react-spinners-kit";
 
-import Web3 from "../../config.main.web3";
 
+import Web3, {walletConnect} from "../../config.main.web3";
+import { iOS } from "../../utils/browser";
 import styles from "./styles.module.scss";
 
 function Wallets() {
@@ -17,6 +18,9 @@ function Wallets() {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
+  const [currentProvider, setCurrentProvider] = useState();
+  const [currentAddressWallet, setCurrentAddressWallet] = useState();
+
   const handleToggleDrawer = () => setOpen(!open);
 
   const handleReset = () => {
@@ -25,21 +29,19 @@ function Wallets() {
     localStorage.removeItem("currentWallet");
   };
 
-  function getAddress(originalAddress) {
-    if (originalAddress) {
-      const firstPart = `${originalAddress.substring(
-        0,
-        2
-      )}${originalAddress.substring(2, 6)}`;
-      const secondPart = `${originalAddress.substring(
-        originalAddress.length - 4,
-        originalAddress.length
-      )}`;
-      const publicAddress = `${firstPart}...${secondPart}`;
-      localStorage.setItem("currentWallet", originalAddress.toUpperCase());
-      localStorage.setItem("currentWalletShort", publicAddress.toUpperCase());
-      setAccountData({ publicAddress, originalAddress });
+  function getAddress(originalAdress) {
+    let publicAddress = "";
+    if (originalAdress) {
+      const firstPart = `${originalAdress.substring(0, 2)}${originalAdress
+        .substring(2, 6)
+        .toUpperCase()}`;
+      const secondPart = `${originalAdress
+        .substring(originalAdress.length - 4, originalAdress.length)
+        .toUpperCase()}`;
+      publicAddress = `${firstPart}...${secondPart}`;
+      setCurrentAddressWallet(originalAdress);
     }
+    setAccountData({ publicAddress, originalAdress });
   }
 
   const loadPubKeyData = async (ethProvider) => {
@@ -54,8 +56,8 @@ function Wallets() {
       method: "wallet_addEthereumChain",
       params: [
         {
-          chainId: "0xa4ec", //"0xAEF3",
-          chainName: "Celo Mainnet", // "Alfajores",
+          chainId: "0xA4EC",
+          chainName: "Celo",
           nativeCurrency: {
             name: "CELO",
             symbol: "CELO",
@@ -70,33 +72,90 @@ function Wallets() {
     getAddress(accounts[0]);
   };
 
+  // const loadWeb3Provider = async () => {
+  //   setLoading(true);
+  //   const provider = await detectEthereumProvider();
+  //   if (provider) {
+  //     try {
+  //       await provider.enable();
+  //       const web3Loadie = Web3().web3Provider;
+  //      // console.log(web3Loadie);
+  //       if (web3Loadie) {
+  //         loadPubKeyData(provider);
+  //         setLoading(false);
+  //         handleToggleDrawer();
+  //       } else {
+  //         setLoading(false);
+  //       }
+  //     } catch (err) {
+  //       setLoading(false);
+  //     }
+  //   } else {
+  //     setLoading(false);
+  //   }
+  // };
+
   const loadWeb3Provider = async () => {
     setLoading(true);
     const provider = await detectEthereumProvider();
+    setCurrentProvider("Metamask");
     if (provider) {
       try {
         await provider.enable();
-        const web3Loadie = Web3().web3Provider;
+        const web3Loadie = await Web3();
         if (web3Loadie) {
           loadPubKeyData(provider);
           setLoading(false);
           handleToggleDrawer();
         } else {
           setLoading(false);
+        //  setError(502);
         }
       } catch (err) {
         setLoading(false);
+       // setError(503);
       }
     } else {
       setLoading(false);
+     // setError(500);
     }
   };
 
+  const loadWalletConnectProvider = async () => {
+    setLoading(true);
+    try {
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "hidden" && iOS()) {
+          localStorage.removeItem("WALLETCONNECT_DEEPLINK_CHOICE");
+        }
+      });
+      const { provider } = await walletConnect();
+      setCurrentProvider("WalletConnect");
+      await provider.on("accountsChanged", (newAccount) => {
+        setLoading(true);
+        setTimeout(() => {
+          getAddress(newAccount[0]);
+          setLoading(false);
+        }, 2000);
+      });
+      getAddress(provider.accounts[0]);
+      setLoading(false);
+      handleToggleDrawer();
+    } catch (err) {
+      console.log("Error ", err);
+      setLoading(false);
+      //setError(500);
+      window.location.reload();
+    }
+  };
+
+  useEffect(()=>{
+    console.log(accountData)
+  }, [accountData])
+
   return (
     <>
-      {accountData.publicAddress &&
-        accountData.publicAddress.startsWith("0X") &&
-        !loading && (
+      {accountData.publicAddress && (
           <Button variant="contained" onClick={handleReset}>
             {accountData.publicAddress}
           </Button>
@@ -114,9 +173,20 @@ function Wallets() {
         </Typography>
         <div className={styles.Loading}>
           {!loading && (
+            <div>
+
             <Button variant="contained" onClick={loadWeb3Provider}>
               METAMASK
             </Button>
+
+            <Button
+              variant="contained"
+              onClick={loadWalletConnectProvider}
+            >
+              VALORA
+            </Button>
+            </div>
+
           )}
           {loading && <CubeSpinner frontColor="#F58F98" size={30} />}
         </div>

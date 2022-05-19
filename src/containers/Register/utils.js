@@ -1,4 +1,4 @@
-import { configMin, MIM_TOKEN_FUJI_TEST_NET } from "../../config.main.web3";
+import Web3,{ MAIN_FACTORY_CELO_MAINNET } from "../../config.main.web3";
 import config from "../../config.sg.web3";
 import supabase from "../../supabase";
 
@@ -35,7 +35,7 @@ export const getRegisterDetail = async (roundID) => {
 
 export const setRegisterUserStable = async ({ contract }) => {
   return new Promise((resolve, reject) => {
-    const mim = configMin();
+    const mim = Web3();
     mim.methods
       .approve(
         contract,
@@ -43,7 +43,7 @@ export const setRegisterUserStable = async ({ contract }) => {
       )
       .send({
         from: localStorage.getItem("currentWallet"),
-        to: MIM_TOKEN_FUJI_TEST_NET,
+        to: MAIN_FACTORY_CELO_MAINNET,
       })
       .once("receipt", async (receipt) => {
         resolve(receipt);
