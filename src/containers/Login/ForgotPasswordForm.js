@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext,  useState } from "react";
 import {
     Input,
     Button,
@@ -10,11 +10,22 @@ import supabase from "../../supabase";
 
 export default function  ForgotPasswordForm(props) {    
     const { switchToSignin } = useContext(AuthContext);
+    const [email , setEmail ] = useState('');
+
+    const onChangeInput= (e) => {
+        switch(e.target.name)
+        {
+            case 'email':
+                setEmail(e.target.value);
+             break
+        }
+
+   }
     
   
 
     const handleForgotPassword = async (e) => {
-        const { data, error } = await supabase.auth.resetPasswordForEmail(e.target.value) 
+        const { data, error } = await supabase.auth.api.resetPasswordForEmail(e.target.value) 
         if (data) {
             console.log("enviado");
         }
@@ -34,6 +45,8 @@ export default function  ForgotPasswordForm(props) {
                         size="tiny"
                         autoComplete="email"
                         name="email"
+                        value= {email}
+                        onChange={onChangeInput}
                         icon={<IconMail size={21} stroke={'#666666'} />}
                     />
                 </Space>

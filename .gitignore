@@ -25,3 +25,4 @@ yarn-error.log*
 src/supabase.js
 .vscode
 package-lock.json
+.idea/workspace.xml
