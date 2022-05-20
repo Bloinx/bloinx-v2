@@ -14,6 +14,7 @@ import {
 } from '@supabase/ui';
 import supabase from "../../supabase";
 
+
 import { AuthContext } from "./authContext";
 import { data } from "browserslist";
 
@@ -21,7 +22,7 @@ import { data } from "browserslist";
 
 export default function SignupForm() {
     const { switchToSignin } = useContext(AuthContext);
-
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [password2, setPassword2] = useState('');
