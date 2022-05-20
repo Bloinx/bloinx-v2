@@ -15,6 +15,7 @@ import {
 import supabase from "../../supabase";
 
 import { AuthContext } from "./authContext";
+import { data } from "browserslist";
 
 
 
@@ -26,9 +27,7 @@ export default function SignupForm() {
     const [password2, setPassword2] = useState('');
     const [firstname, setNombre] = useState('');
     const [lastname, setApellido] = useState('');
-    const [telefono, setTelefono] = useState('');
     const [alias, setAlias] = useState('');
-
     const [gender, setGender] = useState('');
 
     const navigate = useNavigate();
@@ -51,10 +50,10 @@ export default function SignupForm() {
             case "lastname":
                 setApellido(e.target.value);
                 break;
-            case "telefono":
-                setTelefono(e.target.value);
-                break;
+            case "gender":
+                setGender(e.target.value);
 
+               break; 
             default:
                 break;
         }
@@ -65,8 +64,18 @@ export default function SignupForm() {
                 {
                     "email": email,
                     "password": password
-
-                });
+                },
+                {
+                    data:{
+                        "firstname": firstname,
+                        "lastname": lastname,
+                        "alias": alias,
+                        "gender":gender
+    
+                    }
+                }
+                    
+            )
 
             if (user) {
                 console.log("Usuario creado con exito ");
